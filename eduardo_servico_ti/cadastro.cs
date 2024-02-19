@@ -202,7 +202,7 @@ namespace eduardo_servico_ti
             {
                 conexao.Open();
 
-                comando.CommandText = "UPDATE clientes SET nome = '" + textBoxNOMECLIENTE.Text + "', celular = '" + textBoxCEL.Text + "', processador = '" + textBoxPROC.Text + "', placame = '" + textBoxPLACA.Text + "', fonte = '" + textBoxFONTE.Text + "', ram = '" + textBoxRAM.Text + "', video = '" + textBoxVID.Text + "', acessorios = '" + textBoxACESS.Text + "', status = '" + comboBoxSTATUS.Text + "', dataentrada = '" + textBox1.Text + "', orcamento = '" + textBoxORCA.Text + "', obsevacao = '" + richTextBoxOBS.Text + "', queixa = '" + richTextBoxQCL.Text + "' WHERE id = " + idREGISTRO + ";";
+                comando.CommandText = "UPDATE clientes SET nome = '" + textBoxNOMECLIENTE.Text + "', celular = '" + textBoxCEL.Text + "', processador = '" + textBoxPROC.Text + "', placamae = '" + textBoxPLACA.Text + "', fonte = '" + textBoxFONTE.Text + "', ram = '" + textBoxRAM.Text + "', video = '" + textBoxVID.Text + "', acessorios = '" + textBoxACESS.Text + "', status = '" + comboBoxSTATUS.Text + "', dataentrada = '" + textBox1.Text + "', orcamento = '" + textBoxORCA.Text + "', obsevacao = '" + richTextBoxOBS.Text + "', queixa = '" + richTextBoxQCL.Text + "' WHERE idclientes = " + idREGISTRO + ";";
                 int resultado = comando.ExecuteNonQuery();
                 if (resultado > 0)
                 {
@@ -216,7 +216,7 @@ namespace eduardo_servico_ti
             catch (Exception erro_mysql)
             {
                 // Mensagem de erro - MySQL
-                // MessageBox.Show(erro_mysql.Message);
+                MessageBox.Show(erro_mysql.Message);
 
                 // Mensagem de erro - USUÁRIO
                 MessageBox.Show("Erro de Sistema. Solicite ajuda!");
@@ -297,6 +297,37 @@ namespace eduardo_servico_ti
         private void cadastro_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBoxPESQ.Text == "")
+                {
+                    ATUALIZA_cadastro();
+                }
+                else
+                {
+                    conexao.Open();
+
+                    comando.CommandText = "SELECT * FROM clientes WHERE nome LIKE '%" + textBoxPESQ.Text + "%';";
+                    MySqlDataAdapter adaptadorSERVICO = new MySqlDataAdapter(comando);
+                    DataTable tabelaSERVICO = new DataTable();
+                    adaptadorSERVICO.Fill(tabelaSERVICO);
+
+                    dataGridView1.DataSource = tabelaSERVICO;
+                    dataGridView1.Columns["idclientes"].HeaderText = "Código";
+                }
+            }
+            catch (Exception erro_mysql)
+            {
+                MessageBox.Show(erro_mysql.Message);
+            }
+            finally
+            {
+                conexao.Close();
+            }
         }
     }
 }
